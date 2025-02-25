@@ -6,8 +6,8 @@ ___
 * Clone this repository
 * rename **.env.example** to **.env**
 * Add your *API Key* from chatgpt to the **.env** file
-* Run the script ``add_to_path.ps1`` in order to add this folder to *PATH* in windows environment variables or add it manually.
-*(This is optional but makes it easier to run the app from any location in your terminal)*
+* Run the script ``add_to_path.ps1`` in order to add this folder to *PATH* in windows environment variables.
+*(This will make the app run as a native command in your terminal)*
 ___
 ### How to run 🏃‍♂️‍➡️
 * Open PowerShell
@@ -22,8 +22,6 @@ ___
 ___
 ### Settings
 All you need to run this project is to provide your own API Key from chatgpt. [See how to get one in this article](https://dev.to/onlinemsr/how-to-get-chatgpt-api-key-a-step-by-step-guide-507k)
-
-You can also customize the persona adopted by the model in the file *personas.json*
 
 `API_KEY` Your API Key
 
