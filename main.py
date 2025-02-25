@@ -6,13 +6,16 @@ import argparse
 from dotenv import load_dotenv
 import os
 import persona
+import re
 
+INITIAL_MESSAGES = [{"role": "system", "content": persona.persona_description}]
+AI_NAME = persona.selected_persona["name"]
 exit_words = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
     "catch you later", "hasta la vista", "sayonara", "au revoir"
 ]
-INITIAL_MESSAGES = [{"role": "system", "content": persona.persona_description}]
+exit_pattern = rf"\b({'|'.join(re.escape(word) for word in exit_words)})[\s,!.?:;]*{re.escape(AI_NAME)}[\s!?.:;]*\b"
 
 def call_AI(messages):
   client = OpenAI(api_key=os.getenv("API_KEY"))
@@ -27,7 +30,7 @@ def call_AI(messages):
   return response.choices[0].message.content
 
 def assistant_response(message):
-    print(f"\n{persona.selected_persona["name"]}: {message}")
+    print(f"\n{AI_NAME}: {message}")
 
 def chat(messages, message=None, quit_after_response=False):
   if message:
@@ -48,7 +51,7 @@ def chat(messages, message=None, quit_after_response=False):
     if not user_message:
       continue
 
-    if user_message.lower() in exit_words:
+    if re.search(exit_pattern, user_message.lower(), re.IGNORECASE):
       chat(new_messages, user_message, True)
       break
     
@@ -81,4 +84,4 @@ if __name__ == "__main__":
   if args.message:
     chat(INITIAL_MESSAGES,args.message, args.quit)
   else:
-    chat(INITIAL_MESSAGES, f"Hi {persona.selected_persona["name"]}!")
+    chat(INITIAL_MESSAGES, f"Hi {AI_NAME}!")
