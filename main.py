@@ -7,6 +7,11 @@ from dotenv import load_dotenv
 import os
 import persona
 
+exit_words = [
+    "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
+    "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
+    "catch you later", "hasta la vista", "sayonara", "au revoir"
+]
 INITIAL_MESSAGES = [{"role": "system", "content": persona.persona_description}]
 
 def call_AI(messages):
@@ -43,8 +48,8 @@ def chat(messages, message=None, quit_after_response=False):
     if not user_message:
       continue
 
-    if user_message.lower() == "q":
-      assistant_response("See you next time! :)")
+    if user_message.lower() in exit_words:
+      chat(new_messages, user_message, True)
       break
     
     new_messages = messages + [{"role": "user", "content": user_message}]
