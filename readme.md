@@ -18,7 +18,7 @@ ___
 * ```ai "your message" -q```: send a message and quit after the response *(always use quotes in your messages)*
 * ```ai```: opens the chat
 * ```ai "your message"```: opens the chat with a message
-* ``q``: quit the chat
+* `q` | ``bye`` | `see ya`: quit the chat
 ___
 ### Settings
 All you need to run this project is to provide your own API Key from chatgpt. [See how to get one in this article](https://dev.to/onlinemsr/how-to-get-chatgpt-api-key-a-step-by-step-guide-507k)
