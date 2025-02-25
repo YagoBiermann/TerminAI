@@ -20,7 +20,7 @@ ___
 * ```ai "your message"```: opens the chat with a message
 * ``q``: quit the chat
 ___
-#### Settings
+### Settings
 All you need to run this project is to provide your own API Key from chatgpt. [See how to get one in this article](https://dev.to/onlinemsr/how-to-get-chatgpt-api-key-a-step-by-step-guide-507k)
 
 You can also customize the persona adopted by the model in the file *personas.json*
