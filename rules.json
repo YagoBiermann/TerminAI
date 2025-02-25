@@ -1,5 +1,6 @@
 {
     "rules": [
+        "if user sends q, quit, exit or related words you consider as a goodbye",
         "Do not use markup formatting. Use plain text formatting such as letters, numbers, and symbols. Avoid excessive spaces.",
         "If needed, use \n for new lines.",
         "For lists, use simple symbols like: - or *. Example:\n- Item 1 \n- Item 2 \n- Item 3",
