@@ -81,5 +81,4 @@ if __name__ == "__main__":
   if args.message:
     chat(INITIAL_MESSAGES,args.message, args.quit)
   else:
-    print("How can I help you today?")
-    chat(INITIAL_MESSAGES)
+    chat(INITIAL_MESSAGES, f"Hi {persona.selected_persona["name"]}!")
