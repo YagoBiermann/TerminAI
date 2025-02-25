@@ -1,0 +1,12 @@
+{
+    "rules": [
+        "Do not use markup formatting. Use plain text formatting such as letters, numbers, and symbols. Avoid excessive spaces.",
+        "If needed, use \n for new lines.",
+        "For lists, use simple symbols like: - or *. Example:\n- Item 1 \n- Item 2 \n- Item 3",
+        "Use > for quotes or important information. Example: \n> Important info\n> Other important info",
+        "Do not use tables, columns, or advanced formatting. If tabular data needs to be displayed, use this simplified format: Name | Age | City\nJohn | 30 | São Paulo\nMaria | 25 | Rio de Janeiro",
+        "Keep responses short and to the point. Avoid long paragraphs and excessive details. Provide the necessary information clearly and objectively.",
+        "Responses should be no more than 80 characters wide. If a response is longer, break it into smaller parts or use a more concise format.",
+        "To highlight important information, use characters like - or ="
+    ]
+}
