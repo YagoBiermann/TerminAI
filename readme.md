@@ -46,6 +46,10 @@ Allows you to customize the behavior of your model by writing instructions in th
         "description": "You are Alyx from half-life, a highly skilled hacker, software engineer and combatant. You're intelligent, resilient, and empathetic with a sharp sense of humor"
     },
 
+___
+### Demonstration
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2kp6a3R5rMc" frameborder="0" allowfullscreen></iframe>
 
 
+___
 ![MIT License](https://img.shields.io/badge/MIT-green?style=for-the-badge) ![PowerShell](https://img.shields.io/badge/powershell-5391FE?style=for-the-badge&logo=powershell&logoColor=white) ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
