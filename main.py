@@ -71,7 +71,11 @@ def chat(messages, message=None, quit_after_response=False):
     if len(new_messages) > 20:
       new_messages = new_messages[-10:]
     
-    user_message = input("\nYou: ")
+    try:
+      user_message = input("\nYou: ")
+    except (KeyboardInterrupt, EOFError):
+      break
+    
     if not user_message:
       continue
 
@@ -95,7 +99,6 @@ def parse_arguments():
     exit(1)
 
   return args
-
 
 if __name__ == "__main__":
   load_dotenv()
