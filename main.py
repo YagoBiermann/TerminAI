@@ -76,7 +76,7 @@ def display_ai_response(message):
 
 def trim_chat_history(chat_history: list):
     if len(chat_history) > 20:
-      chat_history[-10:]
+      chat_history[:] = chat_history[-10:]
       chat_history.insert(0, PERSONA)
 
 def chat_loop(chat_history: list) -> None:
