@@ -13,12 +13,12 @@ import threading
 PERSONA = {"role": "system", "content": persona.persona_description}
 CHAT_HISTORY = [PERSONA]
 AI_NAME = persona.selected_persona["name"]
-exit_words = [
+EXIT_WORDS = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
     "catch you later", "hasta la vista", "sayonara", "au revoir"
 ]
-exit_pattern = rf"\b({'|'.join(re.escape(word) for word in exit_words)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
+exit_pattern = rf"\b({'|'.join(re.escape(word) for word in EXIT_WORDS)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
 def spinner(stop_event: threading.Event):
     spinner_chars = ['-', '\\', '|', '/']
