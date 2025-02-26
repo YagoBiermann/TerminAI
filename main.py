@@ -117,9 +117,8 @@ def main():
 
   if args.message:
     handle_user_interaction(CHAT_HISTORY, args.message)
-    chat_loop(CHAT_HISTORY)
-    if args.quit:
-      sys.exit(0)
+    if not args.quit:
+      chat_loop(CHAT_HISTORY)
   else:
     handle_user_interaction(CHAT_HISTORY, f"Hi {AI_NAME}!")
     chat_loop(CHAT_HISTORY)
