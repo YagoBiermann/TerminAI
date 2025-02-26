@@ -28,7 +28,7 @@ def spinner():
             sys.stdout.flush()
             time.sleep(0.1)
 
-def call_AI(messages):
+def call_ai(messages: list) -> str:
   global done
   client = OpenAI(api_key=os.getenv("API_KEY"))
 
@@ -54,7 +54,7 @@ def call_AI(messages):
 
   return response.choices[0].message.content
 
-def assistant_response(message):
+def display_ai_response(message):
     print(f"\n{AI_NAME}: {message}")
 
 def chat_loop(chat_history: list) -> None:
