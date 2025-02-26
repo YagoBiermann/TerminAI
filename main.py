@@ -83,7 +83,8 @@ def chat_loop(chat_history: list) -> None:
     if not user_message:
       continue
 
-    if re.search(exit_pattern, user_message.lower(), re.IGNORECASE):
+    match_exit_pattern = re.search(exit_pattern, user_message.lower(), re.IGNORECASE)
+    if match_exit_pattern:
       handle_user_interaction(chat_history, user_message)
       break
 
