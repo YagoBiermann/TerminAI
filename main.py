@@ -70,6 +70,7 @@ def chat(messages, message=None, quit_after_response=False):
   while True:
     if len(new_messages) > 20:
       new_messages = new_messages[-10:]
+      new_messages.insert(0, INITIAL_MESSAGES[0])
     
     try:
       user_message = input("\nYou: ")
