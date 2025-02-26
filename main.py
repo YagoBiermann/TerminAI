@@ -75,7 +75,7 @@ def chat(messages, message=None, quit_after_response=False):
       user_message = input("\nYou: ")
     except (KeyboardInterrupt, EOFError):
       break
-    
+
     if not user_message:
       continue
 
@@ -100,7 +100,7 @@ def parse_arguments():
 
   return args
 
-if __name__ == "__main__":
+def main():
   load_dotenv()
   args = parse_arguments()
 
@@ -112,3 +112,6 @@ if __name__ == "__main__":
     chat(INITIAL_MESSAGES,args.message, args.quit)
   else:
     chat(INITIAL_MESSAGES, f"Hi {AI_NAME}!")
+
+if __name__ == "__main__":
+  main()
