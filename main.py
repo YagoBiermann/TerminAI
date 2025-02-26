@@ -65,9 +65,9 @@ def display_ai_response(message):
 
 def chat_loop(chat_history: list) -> None:
   while True:
-    if len(new_messages) > 20:
-      new_messages = new_messages[-10:]
-      new_messages.insert(0, INITIAL_MESSAGES[0])
+    if len(chat_history) > 20:
+      chat_history[-10:]
+      chat_history.insert(0, PERSONA)
     
     try:
       user_message = input("\nYou: ")
