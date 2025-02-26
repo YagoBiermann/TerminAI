@@ -36,7 +36,7 @@ def show_spinner():
   stop_event = threading.Event()
   spinner_thread = threading.Thread(target=spinner, args=(stop_event,))
   spinner_thread.start()
-  
+
   return spinner_thread, stop_event
 
 def stop_spinner(spinner_thread: threading.Thread, stop_event: threading.Event):
@@ -57,9 +57,8 @@ def handle_user_interaction(chat_history: list, user_message: str):
   display_ai_response(response)
 
 def call_ai(messages: list) -> str:
-  client = OpenAI(api_key=os.getenv("API_KEY"))
   try:
-    response = client.chat.completions.create(
+    response = OpenAIClient.chat.completions.create(
         model=os.getenv("MODEL"),
         store=False,
         messages = messages,
@@ -104,11 +103,17 @@ def parse_arguments():
   args, unknown_args = parser.parse_known_args()
   if unknown_args:
     print(f"Please, use quotes in your first message")
-    exit(1)
+    sys.exit(1)
 
   return args
 
 def main():
+  global OpenAIClient
+  try:
+    OpenAIClient = OpenAI(api_key=os.getenv("API_KEY"))
+  except:
+    print("Unable to connect to OpenAI")
+
   load_dotenv()
   args = parse_arguments()
   if args.message is None and args.quit:
