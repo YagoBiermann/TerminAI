@@ -15,7 +15,7 @@ exit_words = [
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
     "catch you later", "hasta la vista", "sayonara", "au revoir"
 ]
-exit_pattern = rf"\b({'|'.join(re.escape(word) for word in exit_words)})[\s,!.?:;]*{re.escape(AI_NAME)}[\s!?.:;]*\b"
+exit_pattern = rf"\b({'|'.join(re.escape(word) for word in exit_words)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
 def call_AI(messages):
   client = OpenAI(api_key=os.getenv("API_KEY"))
