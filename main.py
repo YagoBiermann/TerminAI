@@ -46,7 +46,7 @@ def handle_user_interaction(chat_history: list, user_message: str):
     stop_event.set()
     spinner_thread.join()
     chat_history.append({"role":"assistant", "content": response})
-    
+
   display_ai_response(response)
 
 def call_ai(messages: list) -> str:
@@ -67,12 +67,14 @@ def call_ai(messages: list) -> str:
 def display_ai_response(message):
     print(f"\n{AI_NAME}: {message}")
 
-def chat_loop(chat_history: list) -> None:
-  while True:
+def trim_chat_history(chat_history: list):
     if len(chat_history) > 20:
       chat_history[-10:]
       chat_history.insert(0, PERSONA)
-    
+
+def chat_loop(chat_history: list) -> None:
+  while True:
+    trim_chat_history(chat_history)
     try:
       user_message = input("\nYou: ")
     except (KeyboardInterrupt, EOFError):
