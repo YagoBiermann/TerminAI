@@ -20,13 +20,17 @@ exit_words = [
 ]
 exit_pattern = rf"\b({'|'.join(re.escape(word) for word in exit_words)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
-def spinner():
+def spinner(stop_event: threading.Event):
     spinner_chars = ['-', '\\', '|', '/']
-    while not done:
+    while not stop_event.is_set():
         for symbol in spinner_chars:
+            if stop_event.is_set():
+              break
             sys.stdout.write(f"\r {symbol} ")
             sys.stdout.flush()
             time.sleep(0.1)
+    sys.stdout.write("\r" + " " * 20 + "\r")
+    sys.stdout.flush()
 
 def handle_user_interaction(chat_history: list, user_message: str):
   chat_history.append({"role": "user", "content": user_message})
@@ -35,11 +39,10 @@ def handle_user_interaction(chat_history: list, user_message: str):
   display_ai_response(response)
 
 def call_ai(messages: list) -> str:
-  global done
   client = OpenAI(api_key=os.getenv("API_KEY"))
 
-  done = False
-  spinner_thread = threading.Thread(target=spinner)
+  stop_event = threading.Event()
+  spinner_thread = threading.Thread(target=spinner, args=(stop_event,))
   spinner_thread.start()
 
   try:
@@ -50,15 +53,14 @@ def call_ai(messages: list) -> str:
         temperature=float(os.getenv("TEMPERATURE")),
         stream=False
     )
-  except:
+    ai_response = response.choices[0].message.content
+  except: 
     return "Sorry, I can't answer now..."
   finally:
-    done = True
+    stop_event.set()
     spinner_thread.join()
-    sys.stdout.write("\r" + " " * 20 + "\r")  
-    sys.stdout.flush()
 
-  return response.choices[0].message.content
+  return ai_response
 
 def display_ai_response(message):
     print(f"\n{AI_NAME}: {message}")
