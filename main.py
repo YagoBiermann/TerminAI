@@ -10,7 +10,7 @@ import re
 import time
 import threading
 
-INITIAL_MESSAGES = [{"role": "system", "content": persona.persona_description}]
+CHAT_HISTORY = [{"role": "system", "content": persona.persona_description}]
 AI_NAME = persona.selected_persona["name"]
 exit_words = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
@@ -110,7 +110,7 @@ def main():
     sys.exit(1)
 
   if args.message:
-    chat(INITIAL_MESSAGES,args.message, args.quit)
+    chat(CHAT_HISTORY,args.message, args.quit)
   else:
     chat(INITIAL_MESSAGES, f"Hi {AI_NAME}!")
 
