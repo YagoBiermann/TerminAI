@@ -48,7 +48,8 @@ Allows you to customize the behavior of your model by writing instructions in th
 
 ___
 ### Demonstration
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2kp6a3R5rMc" frameborder="0" allowfullscreen></iframe>
+https://github.com/user-attachments/assets/fe93cafc-c814-471b-9f70-dc6fd813a8de
+
 
 
 ___
