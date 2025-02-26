@@ -78,14 +78,10 @@ def chat_loop(chat_history: list) -> None:
       continue
 
     if re.search(exit_pattern, user_message.lower(), re.IGNORECASE):
-      chat(new_messages, user_message, True)
+      handle_user_interaction(chat_history, user_message)
       break
-    
-    new_messages = messages + [{"role": "user", "content": user_message}]
-    response = call_AI(new_messages)
-    new_messages = new_messages + [{"role": "assistant", "content": response}]
 
-    assistant_response(response)
+    handle_user_interaction(chat_history, user_message)
 
 def parse_arguments():
   parser = argparse.ArgumentParser(description="Inline AI assistance")
@@ -101,7 +97,6 @@ def parse_arguments():
 def main():
   load_dotenv()
   args = parse_arguments()
-
   if args.message is None and args.quit:
     print("Error: The -q/--quit flag requires a message.")
     sys.exit(1)
