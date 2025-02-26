@@ -10,7 +10,8 @@ import re
 import time
 import threading
 
-CHAT_HISTORY = [{"role": "system", "content": persona.persona_description}]
+PERSONA = {"role": "system", "content": persona.persona_description}
+CHAT_HISTORY = [PERSONA]
 AI_NAME = persona.selected_persona["name"]
 exit_words = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
