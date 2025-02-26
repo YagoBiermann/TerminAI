@@ -107,9 +107,11 @@ def main():
     sys.exit(1)
 
   if args.message:
-    chat(CHAT_HISTORY,args.message, args.quit)
-  else:
-    chat(INITIAL_MESSAGES, f"Hi {AI_NAME}!")
+    handle_user_interaction(CHAT_HISTORY, args.message)
+    if args.quit:
+      sys.exit(0)
+  handle_user_interaction(CHAT_HISTORY, f"Hi {AI_NAME}!")
+  chat_loop(CHAT_HISTORY)
 
 if __name__ == "__main__":
   main()
