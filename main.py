@@ -34,17 +34,23 @@ def spinner(stop_event: threading.Event):
 
 def handle_user_interaction(chat_history: list, user_message: str):
   chat_history.append({"role": "user", "content": user_message})
-  response = call_ai(chat_history)
-  chat_history.append({"role":"assistant", "content": response})
-  display_ai_response(response)
-
-def call_ai(messages: list) -> str:
-  client = OpenAI(api_key=os.getenv("API_KEY"))
-
   stop_event = threading.Event()
   spinner_thread = threading.Thread(target=spinner, args=(stop_event,))
   spinner_thread.start()
 
+  try:
+    response = call_ai(chat_history)
+  except:
+    display_ai_response(response)
+  finally:
+    stop_event.set()
+    spinner_thread.join()
+    chat_history.append({"role":"assistant", "content": response})
+    
+  display_ai_response(response)
+
+def call_ai(messages: list) -> str:
+  client = OpenAI(api_key=os.getenv("API_KEY"))
   try:
     response = client.chat.completions.create(
         model=os.getenv("MODEL"),
@@ -56,10 +62,6 @@ def call_ai(messages: list) -> str:
     ai_response = response.choices[0].message.content
   except: 
     return "Sorry, I can't answer now..."
-  finally:
-    stop_event.set()
-    spinner_thread.join()
-
   return ai_response
 
 def display_ai_response(message):
