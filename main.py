@@ -57,17 +57,7 @@ def call_AI(messages):
 def assistant_response(message):
     print(f"\n{AI_NAME}: {message}")
 
-def chat(messages, message=None, quit_after_response=False):
-  if message:
-    new_messages = messages + [{"role": "user", "content": message}]
-    response = call_AI(new_messages)
-    assistant_response(response)
-  if quit_after_response:
-    sys.exit(0)
-
-  else:
-    new_messages = messages
-  
+def chat_loop(chat_history: list) -> None:
   while True:
     if len(new_messages) > 20:
       new_messages = new_messages[-10:]
