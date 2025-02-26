@@ -28,6 +28,12 @@ def spinner():
             sys.stdout.flush()
             time.sleep(0.1)
 
+def handle_user_interaction(chat_history: list, user_message: str):
+  chat_history.append({"role": "user", "content": user_message})
+  response = call_ai(chat_history)
+  chat_history.append({"role":"assistant", "content": response})
+  display_ai_response(response)
+
 def call_ai(messages: list) -> str:
   global done
   client = OpenAI(api_key=os.getenv("API_KEY"))
