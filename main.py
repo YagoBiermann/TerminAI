@@ -32,19 +32,26 @@ def spinner(stop_event: threading.Event):
     sys.stdout.write("\r" + " " * 20 + "\r")
     sys.stdout.flush()
 
-def handle_user_interaction(chat_history: list, user_message: str):
-  chat_history.append({"role": "user", "content": user_message})
+def show_spinner():
   stop_event = threading.Event()
   spinner_thread = threading.Thread(target=spinner, args=(stop_event,))
   spinner_thread.start()
+  
+  return spinner_thread, stop_event
 
+def stop_spinner(spinner_thread: threading.Thread, stop_event: threading.Event):
+  stop_event.set()
+  spinner_thread.join()
+
+def handle_user_interaction(chat_history: list, user_message: str):
   try:
+    chat_history.append({"role": "user", "content": user_message})
+    spinner_thread, stop_event = show_spinner()
     response = call_ai(chat_history)
   except:
     display_ai_response(response)
   finally:
-    stop_event.set()
-    spinner_thread.join()
+    stop_spinner(spinner_thread, stop_event)
     chat_history.append({"role":"assistant", "content": response})
 
   display_ai_response(response)
