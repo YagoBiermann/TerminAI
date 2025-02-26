@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import os
 import persona
 import re
+import time
+import threading
 
 INITIAL_MESSAGES = [{"role": "system", "content": persona.persona_description}]
 AI_NAME = persona.selected_persona["name"]
@@ -17,16 +19,38 @@ exit_words = [
 ]
 exit_pattern = rf"\b({'|'.join(re.escape(word) for word in exit_words)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
+def spinner():
+    spinner_chars = ['-', '\\', '|', '/']
+    while not done:
+        for symbol in spinner_chars:
+            sys.stdout.write(f"\r {symbol} ")
+            sys.stdout.flush()
+            time.sleep(0.1)
+
 def call_AI(messages):
+  global done
   client = OpenAI(api_key=os.getenv("API_KEY"))
-  
-  response = client.chat.completions.create(
-      model=os.getenv("MODEL"),
-      store=False,
-      messages = messages,
-      temperature=float(os.getenv("TEMPERATURE")),
-      stream=False
-  )  
+
+  done = False
+  spinner_thread = threading.Thread(target=spinner)
+  spinner_thread.start()
+
+  try:
+    response = client.chat.completions.create(
+        model=os.getenv("MODEL"),
+        store=False,
+        messages = messages,
+        temperature=float(os.getenv("TEMPERATURE")),
+        stream=False
+    )
+  except:
+    return "Sorry, I can't answer now..."
+  finally:
+    done = True
+    spinner_thread.join()
+    sys.stdout.write("\r" + " " * 20 + "\r")  
+    sys.stdout.flush()
+
   return response.choices[0].message.content
 
 def assistant_response(message):
