@@ -15,7 +15,7 @@ CHAT_HISTORY = [PERSONA]
 AI_NAME = persona.selected_persona["name"]
 DEFAULT_ERROR_MESSAGE = "Sorry, I can't answer now..."
 EXIT_WORDS = [
-    "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
+    "q", "quit", "exit", "goodbye", "bye", "bye!", "gotta go", "byeee", "goodbye!", "cya", "see ya",
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
     "catch you later", "hasta la vista", "sayonara", "au revoir"
 ]
