@@ -57,6 +57,7 @@ def handle_user_interaction(chat_history: list, user_message: str):
       response = call_ai(chat_history)
     except Exception as e:
       display_ai_response(DEFAULT_ERROR_MESSAGE)
+      sys.exit(1)
     
   chat_history.append({"role":"assistant", "content": response})
   display_ai_response(response)
