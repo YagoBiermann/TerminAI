@@ -7,8 +7,7 @@ from dotenv import load_dotenv
 import os
 import persona
 import re
-import time
-import threading
+from spinner import Spinner
 
 PERSONA = {"role": "system", "content": persona.persona_description}
 CHAT_HISTORY = [PERSONA]
