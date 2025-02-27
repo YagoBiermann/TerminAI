@@ -13,6 +13,7 @@ import threading
 PERSONA = {"role": "system", "content": persona.persona_description}
 CHAT_HISTORY = [PERSONA]
 AI_NAME = persona.selected_persona["name"]
+DEFAULT_ERROR_MESSAGE = "Sorry, I can't answer now..."
 EXIT_WORDS = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "goodbye!", "cya", "see ya",
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
