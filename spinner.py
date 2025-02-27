@@ -26,7 +26,7 @@ class Spinner:
     self.thread.start()
     return self
 
-  def __exit__(self):
+  def __exit__(self, exc_type, exc_value, traceback):
     self.stop_event.set()
     self.thread.join()
     sys.stdout.write("\r" + " " * 20 + "\r")
