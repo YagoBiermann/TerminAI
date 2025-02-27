@@ -21,40 +21,44 @@ EXIT_WORDS = [
 ]
 exit_pattern = rf"\b({'|'.join(re.escape(word) for word in EXIT_WORDS)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
-def spinner(stop_event: threading.Event):
-    spinner_chars = ['-', '\\', '|', '/']
-    while not stop_event.is_set():
-        for symbol in spinner_chars:
-            if stop_event.is_set():
-              break
-            sys.stdout.write(f"\r {symbol} ")
-            sys.stdout.flush()
-            time.sleep(0.1)
+class Spinner:
+  spinner_chars = ['-', '\\', '|', '/']
+
+  def __init__(self, delay: float = 0.1):
+    self.delay = delay
+    self.stop_event = threading.Event()
+    self.thread = threading.Thread(target=self._spin)
+  
+  def _spin(self):
+    while not self.stop_event.is_set():
+      for symbol in self.spinner_chars:
+        if self.stop_event.is_set():
+          break
+        sys.stdout.write(f"\r {symbol} ")
+        sys.stdout.flush()
+        time.sleep(self.delay)
     sys.stdout.write("\r" + " " * 20 + "\r")
     sys.stdout.flush()
 
-def show_spinner():
-  stop_event = threading.Event()
-  spinner_thread = threading.Thread(target=spinner, args=(stop_event,))
-  spinner_thread.start()
+  def __enter__(self):
+    self.thread.start()
+    return self
 
-  return spinner_thread, stop_event
-
-def stop_spinner(spinner_thread: threading.Thread, stop_event: threading.Event):
-  stop_event.set()
-  spinner_thread.join()
+  def __exit__(self, exc_type, exc_value, traceback):
+    self.stop_event.set()
+    self.thread.join()
+    sys.stdout.write("\r" + " " * 20 + "\r")
+    sys.stdout.flush()
 
 def handle_user_interaction(chat_history: list, user_message: str):
-  try:
-    chat_history.append({"role": "user", "content": user_message})
-    spinner_thread, stop_event = show_spinner()
-    response = call_ai(chat_history)
-  except:
-    display_ai_response(response)
-  finally:
-    stop_spinner(spinner_thread, stop_event)
-    chat_history.append({"role":"assistant", "content": response})
-
+  with Spinner():
+    try:
+      chat_history.append({"role": "user", "content": user_message})
+      response = call_ai(chat_history)
+    except Exception as e:
+      display_ai_response(DEFAULT_ERROR_MESSAGE)
+    
+  chat_history.append({"role":"assistant", "content": response})
   display_ai_response(response)
 
 def call_ai(messages: list) -> str:
@@ -68,7 +72,7 @@ def call_ai(messages: list) -> str:
     )
     ai_response = response.choices[0].message.content
   except: 
-    return "Sorry, I can't answer now..."
+    return DEFAULT_ERROR_MESSAGE
   return ai_response
 
 def display_ai_response(message):
