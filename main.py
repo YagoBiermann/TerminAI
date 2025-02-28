@@ -8,7 +8,8 @@ import os
 import persona
 import re
 from spinner import Spinner
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
+from commands import ConfirmCommand, RunCommand
 
 PERSONA = {"role": "system", "content": persona.persona_description}
 CHAT_HISTORY = [PERSONA]
@@ -35,10 +36,10 @@ def handle_user_interaction(chat_history: list, user_message: str):
       display_ai_response(DEFAULT_ERROR_MESSAGE)
       sys.exit(1)
     
-  chat_history.append({"role":"assistant", "content": response})
-  display_ai_response(response)
+  if api_response.is_powershell_command:
+    if ConfirmCommand():
+      RunCommand(api_response.response)
 
-def call_ai(messages: list) -> str:
   try:
     response = OpenAIClient.chat.completions.create(
         model=os.getenv("MODEL"),
