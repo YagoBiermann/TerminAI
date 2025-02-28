@@ -48,7 +48,7 @@ def call_ai(messages: list) -> str:
   return ai_response
 
 def display_ai_response(message):
-    print(f"\n{AI_NAME}: {message}")
+    print(Fore.LIGHTBLUE_EX + f"\n{AI_NAME}: "  + Style.RESET_ALL + f"{message}")
 
 def trim_chat_history(chat_history: list):
     if len(chat_history) > 20:
