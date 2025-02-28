@@ -42,10 +42,18 @@ def call_ai(messages: list) -> str:
         temperature=float(os.getenv("TEMPERATURE")),
         stream=False
     )
-    ai_response = response.choices[0].message.content
-  except: 
-    return DEFAULT_ERROR_MESSAGE
-  return ai_response
+    ai_response = response.choices[0].message.parsed
+    return ai_response
+  except openai.APIConnectionError as e:
+    display_ai_response(API_CONNECTION_ERROR_MESSAGE)
+    sys.exit(1)
+  except openai.RateLimitError as e:
+    display_ai_response(LIMIT_REACHED_ERROR_MESSAGE)
+    sys.exit(1)
+  except Exception as e:
+    display_ai_response(DEFAULT_ERROR_MESSAGE)
+    sys.exit(1)
+
 
 def display_ai_response(message):
     print(Fore.LIGHTBLUE_EX + f"\n{AI_NAME}: "  + Style.RESET_ALL + f"{message}")
