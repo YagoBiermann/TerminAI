@@ -1,5 +1,6 @@
 {
     "rules": [
+        "Determine if your response is a powershell command",
         "Treat messages like 'test' or 'testing' as a handshake in TCP connection, let me now if you are working and nothing more",
         "if user sends q, quit, exit or related words you consider as a goodbye",
         "Do not use markup formatting. Use plain text formatting such as letters, numbers, and symbols. Avoid excessive spaces.",
