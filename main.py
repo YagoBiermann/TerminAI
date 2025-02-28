@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+from pydantic import BaseModel
+import openai
 from openai import OpenAI
 import sys
 import argparse
@@ -27,26 +28,30 @@ EXIT_WORDS = [
 ]
 exit_pattern = rf"\b({'|'.join(re.escape(word) for word in EXIT_WORDS)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
+class AIResponse(BaseModel):
+  is_powershell_command: bool
+  response: str
+
 def handle_user_interaction(chat_history: list, user_message: str):
   with Spinner():
-    try:
-      chat_history.append({"role": "user", "content": user_message})
-      response = call_ai(chat_history)
-    except Exception as e:
-      display_ai_response(DEFAULT_ERROR_MESSAGE)
-      sys.exit(1)
+    chat_history.append({"role": "user", "content": user_message})
+    api_response = call_ai(chat_history)
     
+  chat_history.append({"role":"assistant", "content": api_response.response})
+  display_ai_response(api_response.response)
+  
   if api_response.is_powershell_command:
     if ConfirmCommand():
       RunCommand(api_response.response)
 
+def call_ai(messages: list):
   try:
-    response = OpenAIClient.chat.completions.create(
+    response = OpenAIClient.beta.chat.completions.parse(
         model=os.getenv("MODEL"),
         store=False,
         messages = messages,
         temperature=float(os.getenv("TEMPERATURE")),
-        stream=False
+        response_format=AIResponse
     )
     ai_response = response.choices[0].message.parsed
     return ai_response
