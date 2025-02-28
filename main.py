@@ -8,6 +8,7 @@ import os
 import persona
 import re
 from spinner import Spinner
+from colorama import Fore, Back, Style
 
 PERSONA = {"role": "system", "content": persona.persona_description}
 CHAT_HISTORY = [PERSONA]
@@ -58,7 +59,7 @@ def chat_loop(chat_history: list) -> None:
   while True:
     trim_chat_history(chat_history)
     try:
-      user_message = input("\nYou: ")
+      user_message = input(Fore.LIGHTGREEN_EX + "\nYou: " + Style.RESET_ALL)
     except (KeyboardInterrupt, EOFError):
       break
 
