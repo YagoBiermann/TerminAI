@@ -14,6 +14,11 @@ PERSONA = {"role": "system", "content": persona.persona_description}
 CHAT_HISTORY = [PERSONA]
 AI_NAME = persona.selected_persona["name"]
 DEFAULT_ERROR_MESSAGE = "Sorry, I can't answer now..."
+LIMIT_REACHED_ERROR_MESSAGE = "Sorry, you reach the request limit, try again later... :("
+API_CONNECTION_ERROR_MESSAGE = "I'm unable to connect with the server right now... :("
+UNKNOWN_ARGS_ERROR_MESSAGE = "Please, use quotes in your first message"
+QUIT_ARG_ERROR_MESSAGE = "Error: The -q/--quit flag requires a message."
+
 EXIT_WORDS = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "gotta go", "byeee", "goodbye!", "cya", "see ya",
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
@@ -87,7 +92,7 @@ def parse_arguments():
   parser.add_argument("-q", "--quit", action="store_true", help="Quit after the first response", required=False)
   args, unknown_args = parser.parse_known_args()
   if unknown_args:
-    print(f"Please, use quotes in your first message")
+    print(UNKNOWN_ARGS_ERROR_MESSAGE)
     sys.exit(1)
 
   return args
@@ -96,13 +101,13 @@ def main():
   global OpenAIClient
   try:
     OpenAIClient = OpenAI(api_key=os.getenv("API_KEY"))
-  except:
+  except OpenAI.APIConnectionError:
     print("Unable to connect to OpenAI")
 
   load_dotenv()
   args = parse_arguments()
   if args.message is None and args.quit:
-    print("Error: The -q/--quit flag requires a message.")
+    print(QUIT_ARG_ERROR_MESSAGE)
     sys.exit(1)
 
   if args.message:
