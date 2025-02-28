@@ -59,7 +59,7 @@ def chat_loop(chat_history: list) -> None:
   while True:
     trim_chat_history(chat_history)
     try:
-      user_message = input(Fore.LIGHTGREEN_EX + "\nYou: " + Style.RESET_ALL)
+      user_message = input(Fore.LIGHTGREEN_EX + "\n\nYou: " + Style.RESET_ALL)
     except (KeyboardInterrupt, EOFError):
       break
 
