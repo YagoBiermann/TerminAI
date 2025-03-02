@@ -51,6 +51,7 @@ def call_ai(messages: list):
         store=False,
         messages = messages,
         temperature=float(os.getenv("TEMPERATURE")),
+        max_tokens=250,
         response_format=AIResponse
     )
     ai_response = response.choices[0].message.parsed
