@@ -1,5 +1,5 @@
 import subprocess
-import shlex
+EMPTY_OUTPUT_MESSAGE = "No output was returned"
 
 def ConfirmCommand() -> bool:
     while True:
