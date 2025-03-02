@@ -3,11 +3,14 @@ import shlex
 
 def ConfirmCommand() -> bool:
     while True:
+      try:
         confirmAction = input("Run command? [Y/N]\n").strip().upper()
         if confirmAction == "Y":
             return True
         elif confirmAction == "N":
             return False
+      except (KeyboardInterrupt, EOFError):
+        break 
         
 def RunCommand(command: str) -> None:
     try:
