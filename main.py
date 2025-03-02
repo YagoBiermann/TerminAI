@@ -38,7 +38,7 @@ def handle_user_interaction(chat_history: list, user_message: str):
     api_response = call_ai(chat_history)
     
   chat_history.append({"role":"assistant", "content": api_response.response})
-  display_ai_response(api_response.response)
+  display_ai_response(api_response.response, api_response.is_powershell_command)
   
   if api_response.is_powershell_command:
     if ConfirmCommand():
@@ -67,8 +67,15 @@ def call_ai(messages: list):
     sys.exit(1)
 
 
-def display_ai_response(message):
-    print(Fore.LIGHTBLUE_EX + f"\n{AI_NAME}: "  + Fore.RESET + message.format(Fore=Fore))
+def display_ai_response(message, is_powershell_command=False):
+    try:
+      if is_powershell_command:
+        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}:" + message)
+      else:
+        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}:" + message.format(Fore=Fore))
+    except Exception as e:
+      print(e)
+
 
 def trim_chat_history(chat_history: list):
     if len(chat_history) > 20:
