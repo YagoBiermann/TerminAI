@@ -5,10 +5,8 @@ def ConfirmCommand() -> bool:
     while True:
       try:
         confirmAction = input("Run command? [Y/N]\n").strip().upper()
-        if confirmAction == "Y":
-            return True
-        elif confirmAction == "N":
-            return False
+        sys.stdout.flush()
+        return True if confirmAction == "Y" else False
       except (KeyboardInterrupt, EOFError):
         break 
         
