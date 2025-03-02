@@ -1,7 +1,7 @@
 import sys
 import threading
 import time
-
+from utils import ClearLine
 
 class Spinner():
     def __init__(self):
@@ -27,8 +27,7 @@ class Spinner():
       self.spinner_active = False
       if self.spinner_thread:
           self.spinner_thread.join()
-      sys.stdout.write("\r ")  # Clear the spinner's last character
-      sys.stdout.flush()
+      ClearLine()
 
     def __enter__(self) -> None:
       self.start()
