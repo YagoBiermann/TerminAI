@@ -70,9 +70,9 @@ def call_ai(messages: list):
 def display_ai_response(message, is_powershell_command=False):
     try:
       if is_powershell_command:
-        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}:" + message)
+        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + message)
       else:
-        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}:" + message.format(Fore=Fore))
+        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + message.format(Fore=Fore))
     except Exception as e:
       print(e)
 
