@@ -1,4 +1,7 @@
 import subprocess
+from spinner import Spinner
+from utils import ClearLine
+
 EMPTY_OUTPUT_MESSAGE = "No output was returned"
 
 def ConfirmCommand() -> bool:
