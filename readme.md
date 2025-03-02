@@ -2,7 +2,7 @@
 Run ChatGPT directly from the terminal with optimized response formatting. 🚀
 
 ___
-#### How to install ⚙️
+### How to install ⚙️
 * Clone this repository
 * rename **.env.example** to **.env**
 * Add your *API Key* from chatgpt to the **.env** file
@@ -35,7 +35,7 @@ ___
 ### Personas
 Allows you to customize the behavior of your model by writing instructions in the file ``personas.json``.
 
-##### Template
+### Template
     "Persona-Alias-for-env-file":{
         "name": "Desired name of your model",
         "description": "describe how it should behave"
