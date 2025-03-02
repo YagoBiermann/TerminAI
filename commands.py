@@ -13,3 +13,7 @@ def ConfirmCommand() -> bool:
 def RunCommand(command: str) -> None:
     with Spinner():
         ClearLine()
+        if not result.stdout.strip():
+          print(EMPTY_OUTPUT_MESSAGE)
+        else:
+          print(result.stdout)
