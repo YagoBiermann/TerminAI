@@ -11,4 +11,5 @@ def ConfirmCommand() -> bool:
         break 
         
 def RunCommand(command: str) -> None:
+    with Spinner():
         ClearLine()
