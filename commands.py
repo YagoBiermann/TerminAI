@@ -15,8 +15,14 @@ def ConfirmCommand() -> bool:
         
 def RunCommand(command: str) -> None:
     with Spinner():
+      try:
+        split_command = ["powershell", "-Command", command]
+        result = subprocess.run(split_command, capture_output=True, text=True)
         ClearLine()
         if not result.stdout.strip():
           print(EMPTY_OUTPUT_MESSAGE)
         else:
           print(result.stdout)
+      except subprocess.CalledProcessError:
+          print("\nInvalid command!")
+          return None
