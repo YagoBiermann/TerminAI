@@ -68,7 +68,7 @@ def call_ai(messages: list):
 
 
 def display_ai_response(message):
-    print(Fore.LIGHTBLUE_EX + f"\n{AI_NAME}: "  + Style.RESET_ALL + f"{message}")
+    print(Fore.LIGHTBLUE_EX + f"\n{AI_NAME}: "  + Fore.RESET + message.format(Fore=Fore))
 
 def trim_chat_history(chat_history: list):
     if len(chat_history) > 20:
@@ -79,7 +79,7 @@ def chat_loop(chat_history: list) -> None:
   while True:
     trim_chat_history(chat_history)
     try:
-      user_message = input(Fore.LIGHTGREEN_EX + "\n\nYou: " + Style.RESET_ALL)
+      user_message = input(Fore.LIGHTGREEN_EX + "\n\nYou: " + Fore.RESET)
     except (KeyboardInterrupt, EOFError):
       break
 
