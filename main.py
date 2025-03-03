@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from typing import Optional
 from pydantic import BaseModel
 import openai
 from openai import OpenAI
@@ -20,7 +21,6 @@ LIMIT_REACHED_ERROR_MESSAGE = "Sorry, you reach the request limit, try again lat
 API_CONNECTION_ERROR_MESSAGE = "I'm unable to connect with the server right now... :("
 UNKNOWN_ARGS_ERROR_MESSAGE = "Please, use quotes in your first message"
 QUIT_ARG_ERROR_MESSAGE = "Error: The -q/--quit flag requires a message."
-WARNING_MESSAGE = "Becareful, this action may have consequences..."
 
 EXIT_WORDS = [
     "q", "quit", "exit", "goodbye", "bye", "bye!", "gotta go", "byeee", "goodbye!", "cya", "see ya",
@@ -31,7 +31,7 @@ exit_pattern = rf"\b({'|'.join(re.escape(word) for word in EXIT_WORDS)})(?:[\s,!
 
 class AIResponse(BaseModel):
   is_powershell_command: bool
-  is_destructive: bool
+  powershell_command: Optional[str] = None
   response: str
 
 def handle_user_interaction(chat_history: list, user_message: str):
@@ -40,11 +40,11 @@ def handle_user_interaction(chat_history: list, user_message: str):
     api_response = call_ai(chat_history)
     
   chat_history.append({"role":"assistant", "content": api_response.response})
-  display_ai_response(api_response.response, api_response.is_powershell_command, api_response.is_destructive)
+  display_ai_response(api_response.response, api_response.is_powershell_command, api_response.powershell_command)
   
   if api_response.is_powershell_command:
     if ConfirmCommand():
-      RunCommand(api_response.response)
+      RunCommand(api_response.powershell_command)
 
 def call_ai(messages: list):
   try:
@@ -69,14 +69,11 @@ def call_ai(messages: list):
     sys.exit(1)
 
 
-def display_ai_response(message, is_powershell_command=False, is_destructive=False):
+def display_ai_response(message, is_powershell_command=False, powershell_command = None):
     try:
+      print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + message.format(Fore=Fore))
       if is_powershell_command:
-        if is_destructive:
-          print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + f"{Fore.LIGHTRED_EX}{WARNING_MESSAGE}{Fore.RESET}")
-        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + message)
-      else:
-        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + message.format(Fore=Fore))
+        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + powershell_command)
     except Exception as e:
       print(e)
 
