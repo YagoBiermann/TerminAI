@@ -10,7 +10,7 @@ import os
 import persona
 import re
 from spinner import Spinner
-from colorama import Fore, Style
+from colorama import Fore
 from commands import ConfirmCommand, RunCommand
 
 PERSONA = {"role": "system", "content": persona.persona_description}
@@ -23,16 +23,24 @@ UNKNOWN_ARGS_ERROR_MESSAGE = "Please, use quotes in your first message"
 QUIT_ARG_ERROR_MESSAGE = "Error: The -q/--quit flag requires a message."
 
 EXIT_WORDS = [
-    "q", "quit", "exit", "goodbye", "bye", "bye!", "gotta go", "byeee", "goodbye!", "cya", "see ya",
+    "q", "quit", "exit", "goodbye", "bye", "bye!", "gotta go", "byeee", "byebye", "goodbye!", "cya", "see ya",
     "later", "farewell", "adieu", "peace", "take care", "so long", "toodles",
     "catch you later", "hasta la vista", "sayonara", "au revoir"
 ]
 exit_pattern = rf"\b({'|'.join(re.escape(word) for word in EXIT_WORDS)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
 
+class ChatExitException(Exception):
+  pass
+
 class AIResponse(BaseModel):
   is_powershell_command: bool
   powershell_command: Optional[str] = None
   response: str
+
+def handle_powershell_command(is_powershell_command: bool, command: str):
+  if is_powershell_command:
+    if ConfirmCommand():
+      RunCommand(command)
 
 def handle_user_interaction(chat_history: list, user_message: str):
   with Spinner():
@@ -40,11 +48,9 @@ def handle_user_interaction(chat_history: list, user_message: str):
     api_response = call_ai(chat_history)
     
   chat_history.append({"role":"assistant", "content": api_response.response})
-  display_ai_response(api_response.response, api_response.is_powershell_command, api_response.powershell_command)
-  
-  if api_response.is_powershell_command:
-    if ConfirmCommand():
-      RunCommand(api_response.powershell_command)
+  display_ai_response(api_response.response)
+  display_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
+  handle_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
 
 def call_ai(messages: list):
   try:
@@ -58,48 +64,85 @@ def call_ai(messages: list):
     )
     ai_response = response.choices[0].message.parsed
     return ai_response
-  except openai.APIConnectionError as e:
+  
+  except openai.APIConnectionError:
     display_ai_response(API_CONNECTION_ERROR_MESSAGE)
     sys.exit(1)
-  except openai.RateLimitError as e:
+  except openai.RateLimitError:
     display_ai_response(LIMIT_REACHED_ERROR_MESSAGE)
     sys.exit(1)
-  except Exception as e:
+  except Exception:
     display_ai_response(DEFAULT_ERROR_MESSAGE)
     sys.exit(1)
 
 
-def display_ai_response(message, is_powershell_command=False, powershell_command = None):
+def display_ai_response(message):
     try:
       print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + message.format(Fore=Fore))
-      if is_powershell_command:
-        print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + powershell_command)
     except Exception as e:
       print(e)
 
+def display_powershell_command( is_powershell_command: bool, command:str):
+  if is_powershell_command:
+    print(f"\n{Fore.LIGHTBLUE_EX}{AI_NAME}{Fore.RESET}: " + command)
 
 def trim_chat_history(chat_history: list):
     if len(chat_history) > 20:
       chat_history[:] = chat_history[-10:]
       chat_history.insert(0, PERSONA)
 
+def match_exit_pattern(user_message: str, chat_history: list) -> bool:
+  match_exit_pattern = re.search(exit_pattern, user_message.lower(), re.IGNORECASE)
+  if match_exit_pattern:
+    handle_user_interaction(chat_history, user_message)
+    return True
+
+def get_user_input() -> str:
+  try:
+    user_message = input(Fore.LIGHTGREEN_EX + "\n\nYou: " + Fore.RESET)
+    return user_message
+  except (KeyboardInterrupt, EOFError):
+    raise ChatExitException()
+  
 def chat_loop(chat_history: list) -> None:
   while True:
-    trim_chat_history(chat_history)
     try:
-      user_message = input(Fore.LIGHTGREEN_EX + "\n\nYou: " + Fore.RESET)
-    except (KeyboardInterrupt, EOFError):
-      break
-
-    if not user_message:
-      continue
-
-    match_exit_pattern = re.search(exit_pattern, user_message.lower(), re.IGNORECASE)
-    if match_exit_pattern:
+      trim_chat_history(chat_history)
+      user_message = get_user_input()
+      if not user_message:
+        continue
+      if match_exit_pattern(user_message, chat_history):
+        break
       handle_user_interaction(chat_history, user_message)
+    except ChatExitException:
       break
 
-    handle_user_interaction(chat_history, user_message)
+def handle_invalid_args(args: argparse.Namespace):
+  if args.message is None and args.quit:
+    print(QUIT_ARG_ERROR_MESSAGE)
+    sys.exit(1)
+
+def send_message_and_quit(args: argparse.Namespace):
+  if args.message and args.quit:
+    handle_user_interaction(CHAT_HISTORY, args.message)
+    sys.exit(0)
+
+def send_message_and_keep_open(args: argparse.Namespace):
+  if args.message and not args.quit:
+    handle_user_interaction(CHAT_HISTORY, args.message)
+    chat_loop(CHAT_HISTORY)
+
+def open_chat_without_message(args: argparse.Namespace):
+  if not args.message:
+    handle_user_interaction(CHAT_HISTORY, f"Hi {AI_NAME}!")
+    chat_loop(CHAT_HISTORY)
+
+def init_chat():
+  args = parse_arguments()
+  handle_invalid_args(args)
+  send_message_and_quit(args)
+  send_message_and_keep_open(args)
+  open_chat_without_message(args)
 
 def parse_arguments():
   parser = argparse.ArgumentParser(description="Inline AI assistance")
@@ -112,26 +155,17 @@ def parse_arguments():
 
   return args
 
-def main():
-  global OpenAIClient
+def connect_to_openAI():
   try:
-    OpenAIClient = OpenAI(api_key=os.getenv("API_KEY"))
+    return OpenAI(api_key=os.getenv("API_KEY"))
   except OpenAI.APIConnectionError:
     print("Unable to connect to OpenAI")
 
+def main():
   load_dotenv()
-  args = parse_arguments()
-  if args.message is None and args.quit:
-    print(QUIT_ARG_ERROR_MESSAGE)
-    sys.exit(1)
-
-  if args.message:
-    handle_user_interaction(CHAT_HISTORY, args.message)
-    if not args.quit:
-      chat_loop(CHAT_HISTORY)
-  else:
-    handle_user_interaction(CHAT_HISTORY, f"Hi {AI_NAME}!")
-    chat_loop(CHAT_HISTORY)
+  global OpenAIClient
+  OpenAIClient = connect_to_openAI()
+  init_chat()
 
 if __name__ == "__main__":
   main()
