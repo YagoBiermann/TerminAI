@@ -1,4 +1,5 @@
 import subprocess
+from src.display_messages import display_ai_response
 from src.spinner import Spinner
 from src.utils import ClearCurrentLine, ClearLinesAbove
 
@@ -12,7 +13,11 @@ def ConfirmCommand() -> bool:
         return True if confirmAction == "Y" else False
       except (KeyboardInterrupt, EOFError):
         break 
-        
+
+def reconfirm_command():
+   display_ai_response("Are you sure?")
+   return ConfirmCommand()
+
 def RunCommand(command: str) -> None:
     with Spinner():
       try:

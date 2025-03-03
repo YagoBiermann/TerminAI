@@ -5,7 +5,7 @@ from colorama import Fore
 from src.api import call_ai, connect_to_openAI
 import src.api
 from src.arguments import parse_arguments
-from src.commands import ConfirmCommand, RunCommand
+from src.commands import ConfirmCommand, RunCommand, reconfirm_command
 from src.constants import AI_NAME, CHAT_HISTORY, EXIT_WORDS, PERSONA, QUIT_ARG_ERROR_MESSAGE
 from src.display_messages import display_ai_response, display_powershell_command
 from src.spinner import Spinner
@@ -81,9 +81,15 @@ def handle_user_interaction(chat_history: list, user_message: str):
   chat_history.append({"role":"assistant", "content": api_response.response})
   display_ai_response(api_response.response)
   display_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
-  handle_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
+  handle_powershell_command(api_response.is_powershell_command,api_response.is_harmful_command, api_response.powershell_command)
 
-def handle_powershell_command(is_powershell_command: bool, command: str):
-  if is_powershell_command:
-    if ConfirmCommand():
+def handle_powershell_command(is_powershell_command: bool, is_harmful:bool, command: str):
+  if not is_powershell_command:
+    return
+  if is_harmful:
+    if ConfirmCommand() and reconfirm_command():
       RunCommand(command)
+    return
+  
+  if ConfirmCommand():
+    RunCommand(command)
