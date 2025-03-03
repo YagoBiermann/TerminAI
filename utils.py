@@ -1,5 +1,9 @@
 import sys
 
+def ClearCurrentLine():
+  sys.stdout.write("\r\033[K")
+  sys.stdout.flush()
+
 def ClearLinesAbove(n: int = 1):
     for _ in range(n):
         sys.stdout.write("\033[F")  # Move cursor up
