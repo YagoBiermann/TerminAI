@@ -19,7 +19,7 @@ rules = r"""
   
   Special Rule:
   - Determine if your response is a powershell command
-  - if your response is a powershell command, determine if it has a potential risk to harm the OS. This includes, but is not limited to, commands that delete files or folders, encrypt data, modify the registry, or perform other potentially harmful actions
+  - use colorama to emphasize the risk of taking harmful actions
   - If the user requests an action like: create a folder named 'testfolder' in C:/, respond with the appropriate PowerShell command.
   - Example:
   User: Create a folder named 'testfolder' in C:/
