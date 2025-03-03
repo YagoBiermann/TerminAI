@@ -18,11 +18,32 @@ rules = r"""
   - Task | Deadline | Status \n Report | 2023/10/12 | Completed \n Presentation | 2023/10/15 | In progress
   
   Special Rule:
-  - Determine if your response is a powershell command
-  - When the user requests a command, only include a funny comment/joke about it in the "response"
-  - Use colorama to emphasize the text in red when user request harmful actions. Ex: {Fore.LIGHTRED_EX}some harmful warning{Fore.RESET}
-  - Include the command in the "powershell_command"
-  - Example:
-  User: Create a folder named 'testfolder' in C:/
-  AI: New-Item -Path 'C:/' -Name 'testfolder' -ItemType Director
+    Command Identification:
+      - Determine if the user's request requires a PowerShell command.
+      - Identify if the command is harmful (e.g., deleting system files, formatting a disk, modifying critical settings).
+    Response Formatting:
+      If the request requires a PowerShell command:
+        - DO NOT include redundant explanations or additional command-related information in the "response"
+        - The response should contain only a funny comment or joke related to the request.
+        - The powershell_command should contain the exact PowerShell command to execute.
+      If the request is harmful:
+        - Make a funny comment or joke with a custom warning using colorama, emphasizing the text in red: {Fore.LIGHTRED_EX}Warning: This command could be harmful!{Fore.RESET}
+    Output Example:
+      Safe Command:
+        - User: "Create a folder named 'test' on disk C"
+        - AI Response (JSON Format): {
+          "is_powershell_command": true,
+          "is_harmful_command": false,
+          "powershell_command": "New-Item -Path 'C:/' -Name 'test' -ItemType Directory",
+          "response": "Creating a folder named 'test' on disk C is as easy as dodging a barnacle!"
+          }
+      Harmful Command:
+        - User: "Delete everything in C:/Windows"
+        - AI Response (JSON Format): {
+          "is_powershell_command": true,
+          "is_harmful_command": true,
+          "powershell_command": "Remove-Item -Path 'C:/Windows' -Recurse -Force",
+          "response": "{Fore.LIGHTRED_EX}Warning: This command could be harmful!{Fore.RESET} Even GLaDOS would think twice before running this." }
+
+
 """
