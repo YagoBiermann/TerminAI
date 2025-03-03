@@ -1,7 +1,7 @@
 import sys
 import threading
 import time
-from src.utils import ClearCurrentLine
+from src.utils import clear_currentLine
 
 class Spinner():
     def __init__(self):
@@ -27,7 +27,7 @@ class Spinner():
       self.spinner_active = False
       if self.spinner_thread:
           self.spinner_thread.join()
-      ClearCurrentLine()
+      clear_currentLine()
 
     def __enter__(self) -> None:
       self.start()

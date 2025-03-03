@@ -5,7 +5,7 @@ from colorama import Fore
 from src.api import call_ai, connect_to_openAI
 import src.api
 from src.arguments import parse_arguments
-from src.commands import ConfirmCommand, RunCommand, reconfirm_command
+from src.commands import confirm_command, run_command, reconfirm_command
 from src.constants import AI_NAME, CHAT_HISTORY, EXIT_WORDS, PERSONA, QUIT_ARG_ERROR_MESSAGE
 from src.display_messages import display_ai_response, display_powershell_command
 from src.spinner import Spinner
@@ -87,9 +87,9 @@ def handle_powershell_command(is_powershell_command: bool, is_harmful:bool, comm
   if not is_powershell_command:
     return
   if is_harmful:
-    if ConfirmCommand() and reconfirm_command():
-      RunCommand(command)
+    if confirm_command() and reconfirm_command():
+      run_command(command)
     return
   
-  if ConfirmCommand():
-    RunCommand(command)
+  if confirm_command():
+    run_command(command)

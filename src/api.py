@@ -8,7 +8,7 @@ from src.constants import API_CONNECTION_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE, L
 from src.display_messages import display_ai_response
 
 global OpenAIClient
-class AIResponse(BaseModel):
+class AI_response(BaseModel):
   is_powershell_command: bool
   is_harmful_command: bool
   powershell_command: Optional[str] = None
@@ -28,7 +28,7 @@ def call_ai(messages: list):
         messages = messages,
         temperature=float(os.getenv("TEMPERATURE")),
         max_tokens=250,
-        response_format=AIResponse
+        response_format=AI_response
     )
     ai_response = response.choices[0].message.parsed
     return ai_response

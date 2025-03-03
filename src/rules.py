@@ -44,6 +44,4 @@ rules = r"""
           "is_harmful_command": true,
           "powershell_command": "Remove-Item -Path 'C:/Windows' -Recurse -Force",
           "response": "{Fore.LIGHTRED_EX}Warning: This command could be harmful!{Fore.RESET} Even GLaDOS would think twice before running this." }
-
-
 """
