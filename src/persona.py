@@ -24,10 +24,8 @@ persona_description = ""
 
 if personas and current_persona_key in personas:
     selected_persona = personas[current_persona_key]
-    persona_description = f"""
-  Your name is: {selected_persona['name']}
-  Description: {selected_persona['description']}
-    """
+    for key, value in selected_persona.items():
+      persona_description += f"""{key}: {value}\n"""
 else:
   print(f"Warning: Persona '{current_persona_key}' not applied. Using default settings")
 
