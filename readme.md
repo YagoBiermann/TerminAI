@@ -36,10 +36,6 @@ ___
 Allows you to customize the behavior of your model by writing instructions in the file ``personas.json``.
 
 ### Template
-    "Persona-Alias-for-env-file":{
-        "name": "Desired name of your model",
-        "description": "describe how it should behave"
-    },
     <!-- example -->
     "Alyx": {
         "name": "Alyx",
@@ -48,9 +44,12 @@ Allows you to customize the behavior of your model by writing instructions in th
 
 ___
 ### Demonstration
-https://github.com/user-attachments/assets/fe93cafc-c814-471b-9f70-dc6fd813a8de
 
+#### just chatting
+https://github.com/user-attachments/assets/1885212b-3603-4b94-8317-e028425ab431
 
+#### Running commands with natural language
+https://github.com/user-attachments/assets/3b79f764-764c-4795-94c7-c79f46293e2d
 
 ___
 ![MIT License](https://img.shields.io/badge/MIT-green?style=for-the-badge) ![PowerShell](https://img.shields.io/badge/powershell-5391FE?style=for-the-badge&logo=powershell&logoColor=white) ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
