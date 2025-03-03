@@ -1,7 +1,7 @@
-import persona
+import src.persona
 
-AI_NAME = persona.selected_persona["name"]
-PERSONA = {"role": "system", "content": persona.persona_description}
+AI_NAME = src.persona.selected_persona["name"]
+PERSONA = {"role": "system", "content": src.persona.persona_description}
 CHAT_HISTORY = [PERSONA]
 DEFAULT_ERROR_MESSAGE = "Sorry, I can't answer now..."
 LIMIT_REACHED_ERROR_MESSAGE = "Sorry, you reach the request limit, try again later... :("

@@ -1,6 +1,6 @@
 import subprocess
-from spinner import Spinner
-from utils import ClearCurrentLine, ClearLinesAbove
+from src.spinner import Spinner
+from src.utils import ClearCurrentLine, ClearLinesAbove
 
 EMPTY_OUTPUT_MESSAGE = "No output was returned"
 

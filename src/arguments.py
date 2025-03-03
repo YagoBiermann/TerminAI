@@ -1,6 +1,6 @@
 import argparse
 import sys
-from constants import UNKNOWN_ARGS_ERROR_MESSAGE
+from src.constants import UNKNOWN_ARGS_ERROR_MESSAGE
 
 def parse_arguments():
   parser = argparse.ArgumentParser(description="Inline AI assistance")

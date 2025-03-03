@@ -1,7 +1,7 @@
 import json
 import os
 from dotenv import load_dotenv
-from rules import rules
+from src.rules import rules
 
 load_dotenv()
 
@@ -15,7 +15,8 @@ def load_file(path):
       return None
 
 file_path = os.path.dirname(os.path.abspath(__file__))
-persona_path = os.path.join(file_path, "personas.json")
+root_path = os.path.dirname(file_path)
+persona_path = os.path.join(root_path, "personas.json")
 personas = load_file(persona_path)
 
 current_persona_key = os.getenv('CURRENT_PERSONA')

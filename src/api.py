@@ -4,8 +4,8 @@ from typing import Optional
 from openai import OpenAI
 import openai
 from pydantic import BaseModel
-from constants import API_CONNECTION_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE, LIMIT_REACHED_ERROR_MESSAGE
-from display_messages import display_ai_response
+from src.constants import API_CONNECTION_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE, LIMIT_REACHED_ERROR_MESSAGE
+from src.display_messages import display_ai_response
 
 global OpenAIClient
 class AIResponse(BaseModel):

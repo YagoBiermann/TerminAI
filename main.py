@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+import os
+import sys
 from dotenv import load_dotenv
-from chat import init_chat
-
-def main():
-  load_dotenv()
-  init_chat()
+from src.chat import init_chat
 
 if __name__ == "__main__":
-  main()
+  load_dotenv()
+  sys.path.append(os.path.abspath("src"))
+  init_chat()
