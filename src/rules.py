@@ -19,8 +19,9 @@ rules = r"""
   
   Special Rule:
   - Determine if your response is a powershell command
-  - use colorama to emphasize the risk of taking harmful actions
-  - If the user requests an action like: create a folder named 'testfolder' in C:/, respond with the appropriate PowerShell command.
+  - When the user requests a command, only include a funny comment/joke about it in the "response"
+  - Use colorama to emphasize the text in red when user request harmful actions. Ex: {Fore.LIGHTRED_EX}some harmful warning{Fore.RESET}
+  - Include the command in the "powershell_command"
   - Example:
   User: Create a folder named 'testfolder' in C:/
   AI: New-Item -Path 'C:/' -Name 'testfolder' -ItemType Director
