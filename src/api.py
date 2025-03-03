@@ -10,6 +10,7 @@ from src.display_messages import display_ai_response
 global OpenAIClient
 class AIResponse(BaseModel):
   is_powershell_command: bool
+  is_harmful_command: bool
   powershell_command: Optional[str] = None
   response: str
   
