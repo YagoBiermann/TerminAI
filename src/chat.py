@@ -16,26 +16,26 @@ def init_chat():
   args = parse_arguments()
   src.api.OpenAIClient = connect_to_openAI()
   handle_invalid_args(args)
-  with_message_and_quit(args)
-  with_message(args)
-  without_message(args)
+  init_with_message_and_quit(args)
+  init_with_message(args)
+  init_without_message(args)
 
 def handle_invalid_args(args: argparse.Namespace):
   if args.message is None and args.quit:
     print(QUIT_ARG_ERROR_MESSAGE)
     sys.exit(1)
 
-def with_message_and_quit(args: argparse.Namespace):
+def init_with_message_and_quit(args: argparse.Namespace):
   if args.message and args.quit:
     handle_user_interaction(CHAT_HISTORY, args.message)
     sys.exit(0)
 
-def with_message(args: argparse.Namespace):
+def init_with_message(args: argparse.Namespace):
   if args.message and not args.quit:
     handle_user_interaction(CHAT_HISTORY, args.message)
     chat_loop(CHAT_HISTORY)
 
-def without_message(args: argparse.Namespace):
+def init_without_message(args: argparse.Namespace):
   if not args.message:
     handle_user_interaction(CHAT_HISTORY, f"Hi {AI_NAME}!")
     chat_loop(CHAT_HISTORY)
