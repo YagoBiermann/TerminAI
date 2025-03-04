@@ -63,10 +63,6 @@ def get_user_input() -> str:
   except (KeyboardInterrupt, EOFError):
     raise ChatExitException()
 
-def exit_on_goodbye(response: AI_response):
-  if(response.is_goodbye):
-    sys.exit(0)
-
 def handle_user_interaction(chat_history: list, user_message: str):
   with Spinner():
     chat_history.append({"role": "user", "content": user_message})
@@ -76,15 +72,19 @@ def handle_user_interaction(chat_history: list, user_message: str):
   display_ai_response(api_response.response)
   exit_on_goodbye(api_response)
   display_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
-  handle_powershell_command(api_response.is_powershell_command,api_response.is_harmful_command, api_response.powershell_command)
+  handle_powershell_command(api_response)
 
-def handle_powershell_command(is_powershell_command: bool, is_harmful:bool, command: str):
-  if not is_powershell_command:
+def handle_powershell_command(ai_response: AI_response):
+  if not ai_response.is_powershell_command:
     return
-  if is_harmful:
+  if ai_response.is_harmful:
     if confirm_command() and reconfirm_command():
-      run_command(command)
+      run_command(ai_response.powershell_command)
     return
   
   if confirm_command():
-    run_command(command)
+    run_command(ai_response.powershell_command)
+
+def exit_on_goodbye(response: AI_response):
+  if(response.is_goodbye):
+    sys.exit(0)
