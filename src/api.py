@@ -9,6 +9,7 @@ from src.display_messages import display_ai_response
 
 global OpenAIClient
 class AI_response(BaseModel):
+  is_goodbye: bool
   is_powershell_command: bool
   is_harmful_command: bool
   powershell_command: Optional[str] = None
@@ -20,7 +21,7 @@ def connect_to_openAI():
   except OpenAI.APIConnectionError:
     print("Unable to connect to OpenAI")
 
-def call_ai(messages: list):
+def call_ai(messages: list) -> AI_response:
   try:
     response = OpenAIClient.beta.chat.completions.parse(
         model=os.getenv("MODEL"),

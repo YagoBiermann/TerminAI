@@ -1,12 +1,11 @@
 import argparse
-import re
 import sys
 from colorama import Fore
-from src.api import call_ai, connect_to_openAI
+from src.api import AI_response, call_ai, connect_to_openAI
 import src.api
 from src.arguments import parse_arguments
 from src.commands import confirm_command, run_command, reconfirm_command
-from src.constants import AI_NAME, CHAT_HISTORY, EXIT_WORDS, PERSONA, QUIT_ARG_ERROR_MESSAGE
+from src.constants import AI_NAME, CHAT_HISTORY, PERSONA, QUIT_ARG_ERROR_MESSAGE
 from src.display_messages import display_ai_response, display_powershell_command
 from src.spinner import Spinner
 
@@ -48,8 +47,6 @@ def chat_loop(chat_history: list) -> None:
       user_message = get_user_input()
       if not user_message:
         continue
-      if match_exit_pattern(user_message, chat_history):
-        break
       handle_user_interaction(chat_history, user_message)
     except ChatExitException:
       break
@@ -66,12 +63,9 @@ def get_user_input() -> str:
   except (KeyboardInterrupt, EOFError):
     raise ChatExitException()
 
-def match_exit_pattern(user_message: str, chat_history: list) -> bool:
-  exit_pattern = rf"\b({'|'.join(re.escape(word) for word in EXIT_WORDS)})(?:[\s,!.?:;]+{re.escape(AI_NAME)})?[\s!?.:;]*\b"
-  match_exit_pattern = re.search(exit_pattern, user_message.lower(), re.IGNORECASE)
-  if match_exit_pattern:
-    handle_user_interaction(chat_history, user_message)
-    return True
+def exit_on_goodbye(response: AI_response):
+  if(response.is_goodbye):
+    sys.exit(0)
 
 def handle_user_interaction(chat_history: list, user_message: str):
   with Spinner():
@@ -80,6 +74,7 @@ def handle_user_interaction(chat_history: list, user_message: str):
     
   chat_history.append({"role":"assistant", "content": api_response.response})
   display_ai_response(api_response.response)
+  exit_on_goodbye(api_response)
   display_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
   handle_powershell_command(api_response.is_powershell_command,api_response.is_harmful_command, api_response.powershell_command)
 

@@ -18,6 +18,8 @@ rules = r"""
   - Task | Deadline | Status \n Report | 2023/10/12 | Completed \n Presentation | 2023/10/15 | In progress
   
   Special Rule:
+    Goodbye Identification:
+      - Determine if the user is saying goodbye
     Command Identification:
       - Determine if the user's request requires a PowerShell command.
       - Identify if the command is harmful (e.g., deleting system files, formatting a disk, modifying critical settings).
