@@ -1,4 +1,8 @@
 import sys
+import ctypes
+
+def is_admin():
+    return ctypes.windll.shell32.IsUserAnAdmin() != 0
 
 def clear_currentLine():
   sys.stdout.write("\r\033[K")
