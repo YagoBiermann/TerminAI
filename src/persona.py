@@ -1,9 +1,6 @@
 import json
 import os
 from dotenv import load_dotenv
-from src.rules import rules
-
-load_dotenv()
 
 def load_file(path):
   try:
@@ -14,6 +11,7 @@ def load_file(path):
   except FileNotFoundError:
       return None
 
+load_dotenv()
 file_path = os.path.dirname(os.path.abspath(__file__))
 root_path = os.path.dirname(file_path)
 persona_path = os.path.join(root_path, "personas.json")
@@ -28,5 +26,3 @@ if personas and current_persona_key in personas:
       persona_description += f"""{key}: {value}\n"""
 else:
   print(f"Warning: Persona '{current_persona_key}' not applied. Using default settings")
-
-persona_description += rules
