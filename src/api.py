@@ -12,6 +12,7 @@ class AI_response(BaseModel):
   is_goodbye: bool
   is_powershell_command: bool
   is_harmful_command: bool
+  requires_privilege: bool
   powershell_command: Optional[str] = None
   response: str
   
