@@ -67,17 +67,17 @@ def handle_user_interaction(chat_history: list, user_message: str):
   with Spinner():
     chat_history.append({"role": "user", "content": user_message})
     api_response = call_ai(chat_history)
-    
+
   chat_history.append({"role":"assistant", "content": api_response.response})
   display_ai_response(api_response.response)
   exit_on_goodbye(api_response)
-  display_powershell_command(api_response.is_powershell_command, api_response.powershell_command)
+  display_powershell_command(api_response.powershell_command)
   handle_powershell_command(api_response)
 
 def handle_powershell_command(ai_response: AI_response):
-  if not ai_response.is_powershell_command:
+  if ai_response.powershell_command is None:
     return
-  if ai_response.is_harmful:
+  if ai_response.is_harmful_command:
     if confirm_command() and reconfirm_command():
       run_command(ai_response.powershell_command)
     return
