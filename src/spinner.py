@@ -1,7 +1,7 @@
 import sys
 import threading
 import time
-from src.utils import clear_currentLine
+from utils import clear_currentLine
 
 class Spinner():
     def __init__(self):

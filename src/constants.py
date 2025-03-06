@@ -1,11 +1,11 @@
-import src.persona
-import src.rules
-from src.utils import is_admin
+import persona
+import rules
+from utils import is_admin
 
 RUNNING_WITH_PRIVILEGE = is_admin()
 IS_ADMIN = f"\nIS ADMIN: {RUNNING_WITH_PRIVILEGE}\n\n"
-AI_NAME = src.persona.selected_persona["name"]
-PERSONA = {"role": "system", "content": IS_ADMIN + src.persona.persona_description + src.rules.rules}
+AI_NAME = persona.selected_persona["name"]
+PERSONA = {"role": "system", "content": IS_ADMIN + persona.persona_description + rules.rules}
 CHAT_HISTORY = [PERSONA]
 DEFAULT_ERROR_MESSAGE = "Sorry, I can't answer now..."
 LIMIT_REACHED_ERROR_MESSAGE = "Sorry, you reach the request limit, try again later... :("

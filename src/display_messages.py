@@ -1,5 +1,5 @@
 from colorama import Fore
-from src.constants import AI_NAME
+from constants import AI_NAME
 
 def display_ai_response(message):
     try:

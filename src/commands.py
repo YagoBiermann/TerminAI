@@ -1,7 +1,7 @@
 import subprocess
-from src.display_messages import display_ai_response
-from src.spinner import Spinner
-from src.utils import clear_currentLine, clear_lines_above
+from display_messages import display_ai_response
+from spinner import Spinner
+from utils import clear_currentLine, clear_lines_above
 from colorama import Fore
 
 EMPTY_OUTPUT_MESSAGE = "No output was returned"

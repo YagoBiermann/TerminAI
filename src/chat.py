@@ -1,20 +1,20 @@
 import argparse
 import sys
 from colorama import Fore
-from src.api import AI_response, call_ai, connect_to_openAI
-import src.api
-from src.arguments import parse_arguments
-from src.commands import confirm_command, run_command, reconfirm_command
-from src.constants import AI_NAME, CHAT_HISTORY, PERSONA, QUIT_ARG_ERROR_MESSAGE
-from src.display_messages import display_ai_response, display_powershell_command
-from src.spinner import Spinner
+from api import AI_response, call_ai, connect_to_openAI
+import api
+from arguments import parse_arguments
+from commands import confirm_command, run_command, reconfirm_command
+from constants import AI_NAME, CHAT_HISTORY, PERSONA, QUIT_ARG_ERROR_MESSAGE
+from display_messages import display_ai_response, display_powershell_command
+from spinner import Spinner
 
 class ChatExitException(Exception):
   pass
 
 def init_chat():
   args = parse_arguments()
-  src.api.OpenAIClient = connect_to_openAI()
+  api.OpenAIClient = connect_to_openAI()
   handle_invalid_args(args)
   init_with_message_and_quit(args)
   init_with_message(args)
